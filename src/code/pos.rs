@@ -34,6 +34,7 @@ impl_math!(BytePos, Sub, sub);
 // ----------------------------------------------------------------------------
 /// A region within the source specified by first and last byte offset. `lo`
 /// byte is included in the span, `hi` byte is excluded.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Span {
     pub lo: BytePos,
     pub hi: BytePos,
@@ -62,7 +63,7 @@ impl_math!(ColIdx, Sub, sub);
 
 
 /// Location within one file specified by line and column.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Loc {
     pub line: LineIdx,
     pub col: ColIdx,
