@@ -41,6 +41,19 @@ pub struct Span {
 }
 
 impl Span {
+    /// Creates a Span that points to a single char
+    pub fn single(pos: BytePos) -> Span {
+        Span { lo: pos, hi: pos }
+    }
+
+    pub fn dummy() -> Span {
+        Span { lo: BytePos(1), hi: BytePos(0) }
+    }
+
+    pub fn is_dummy(&self) -> bool {
+        self.lo.0 == 1 && self.hi.0 == 0
+    }
+
     pub fn len(&self) -> SrcOffset {
         (self.hi - self.lo).0
     }
