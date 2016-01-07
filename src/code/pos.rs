@@ -24,8 +24,8 @@ pub type SrcOffset = u32;
 /// Position within source specified by byte offset. This is not equal to
 /// `CharPos` thanks to UTF-8 and multibyte chars. This type always represents
 /// positions relative to the whole codemap.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
-pub struct BytePos(pub u32);
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
+pub struct BytePos(pub SrcOffset);
 
 impl_math!(BytePos, Add, add);
 impl_math!(BytePos, Sub, sub);
@@ -62,11 +62,11 @@ impl Span {
 
 // ----------------------------------------------------------------------------
 /// Represents a line index.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
 pub struct LineIdx(pub SrcOffset);
 
 /// Represents a column index.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
 pub struct ColIdx(pub SrcOffset);
 
 impl_math!(LineIdx, Add, add);
