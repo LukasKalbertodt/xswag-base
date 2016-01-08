@@ -1,3 +1,5 @@
+extern crate term_painter;
+
 pub mod code;
 pub mod diag;
 

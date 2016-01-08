@@ -10,13 +10,26 @@ pub struct Report {
 }
 
 impl Report {
-    /// Creates a report with one message and one span.
+    /// Creates a error report with one message and one span.
     pub fn simple_error<S: Into<String>>(msg: S, span: Span) -> Report {
         Report {
             kind: ReportKind::Error,
             span: span,
             remarks: vec![Remark {
                 kind: RemarkKind::Error,
+                desc: msg.into(),
+                span: Some(span),
+            }],
+        }
+    }
+
+    /// Creates a warning report with one message and one span.
+    pub fn simple_warning<S: Into<String>>(msg: S, span: Span) -> Report {
+        Report {
+            kind: ReportKind::Warning,
+            span: span,
+            remarks: vec![Remark {
+                kind: RemarkKind::Warning,
                 desc: msg.into(),
                 span: Some(span),
             }],

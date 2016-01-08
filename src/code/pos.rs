@@ -46,6 +46,10 @@ impl Span {
         Span { lo: pos, hi: pos }
     }
 
+    pub fn from_pair(span: (BytePos, BytePos)) -> Span {
+        Span { lo: span.0, hi: span.1 }
+    }
+
     pub fn dummy() -> Span {
         Span { lo: BytePos(1), hi: BytePos(0) }
     }

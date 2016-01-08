@@ -5,9 +5,9 @@ use std::cell::RefCell;
 /// such as linebreaks.
 pub struct FileMap {
     /// Original filename or dummy filename of the form "<...>"
-    pub filename: String,
+    filename: String,
     /// The whole content of the file
-    pub src: String,
+    src: String,
     /// List of line beginnings. Wrapped in a `RefCell`, because `FileMap`s
     /// are shared a lot via `Rc` and this is the only thing requiring
     /// mutability. Borrowing it will never panic, because:
@@ -30,6 +30,14 @@ impl FileMap {
             src: src.into(),
             lines: RefCell::new(vec![BytePos(0)]),
         }
+    }
+
+    pub fn filename(&self) -> &str {
+        &self.filename
+    }
+
+    pub fn src(&self) -> &str {
+        &self.src
     }
 
     /// Adds a new line beginning with the given BytePos to the list. Line
