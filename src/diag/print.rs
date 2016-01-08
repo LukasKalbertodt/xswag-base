@@ -1,3 +1,5 @@
+// TODO: get num cols of terminal dynamically
+
 use super::{Report, ReportKind, Remark, RemarkKind};
 use code::{FileMap, LineIdx};
 use term_painter::{ToStyle, Color, Attr};
@@ -51,13 +53,16 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         let indent = 6 + 6 + 2 + title_len + 1;
         let block_width = 80 - indent;
 
-        // TODO: word wrapping
-        for (i, c) in rem.desc.chars().enumerate() {
-            if i % block_width == block_width - 1 {
+        let mut col = 0;
+        for word in rem.desc.split_whitespace() {
+            let word_len = word.chars().count();
+            if col + word_len >= block_width && col != 0 {
                 println!("");
                 print!("           >  {0:>1$} ", " ", title_len);
+                col = 0;
             }
-            print!("{}", White.paint(c));
+            print!("{} ", White.paint(word));
+            col += word_len + 1;
         }
         println!("");
 
@@ -81,8 +86,6 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                             (end.col.0 - start.col.0) as usize
                         );
                     });
-                    // println!("       {:0<1$}{:-<1$}",
-                    //     " ", start.col.0, "^", end.col.0);
                 }
             } else {
                 for line_idx in start.line.0..end.line.0 + 1 {

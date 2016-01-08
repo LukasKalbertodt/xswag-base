@@ -43,6 +43,4 @@ fn main() {
     };
     base::diag::print(&e, &file, opts);
     base::diag::print(&w, &file, opts);
-
-
 }
