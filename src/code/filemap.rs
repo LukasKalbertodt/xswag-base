@@ -75,7 +75,7 @@ impl FileMap {
         self.lines.borrow().get(line.0 as usize).map(|&BytePos(start)| {
             let end = self.src[start as usize..]
                           .find("\n")
-                          .unwrap_or(self.src.len());
+                          .unwrap_or(self.src.len() - start as usize);
             &self.src[start as usize .. (end + start as usize)]
         })
     }

@@ -32,11 +32,15 @@ fn main() {
     let w = Report::simple_warning(
         "that's a good question. I would be terrified the whole time not \
         knowing where that train would take me. I mean: it could be a bad \
-        place! I really hope that I triggered line break by now...",
+        place! I really hope I triggered a line break by now...",
         Span { lo: BytePos(block_lo), hi: BytePos(block_hi) }
     ).with_note("maybe because you are together?");
 
-    let opts = base::diag::PrintOptions { unicode: true, color: true };
+    let opts = base::diag::PrintOptions {
+        unicode: true,
+        color: true,
+        line_wrap: true
+    };
     base::diag::print(&e, &file, opts);
     base::diag::print(&w, &file, opts);
 

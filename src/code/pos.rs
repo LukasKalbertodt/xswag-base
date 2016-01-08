@@ -69,6 +69,12 @@ impl Span {
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
 pub struct LineIdx(pub SrcOffset);
 
+impl ::std::fmt::Display for LineIdx {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        (self.0 + 1).fmt(f)
+    }
+}
+
 /// Represents a column index.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
 pub struct ColIdx(pub SrcOffset);
