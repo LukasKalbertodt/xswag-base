@@ -35,12 +35,16 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         ReportKind::Warning => White.bold().bg(Yellow).paint("WARNING"),
     };
 
-    let start = src.get_loc(rep.span.lo);
-    let end = src.get_loc(rep.span.hi);
-    let line = if start.line != end.line {
-        format!("{}-{}", start.line.0, end.line.0)
+    let line = if rep.span.is_dummy() {
+        "<dummy-span>".into()
     } else {
-        start.line.0.to_string()
+        let start = src.get_loc(rep.span.lo);
+        let end = src.get_loc(rep.span.hi);
+        if start.line != end.line {
+            format!("{}-{}", start.line.0, end.line.0)
+        } else {
+            start.line.0.to_string()
+        }
     };
 
     println!("+---- {} in {} : {} ----+",
@@ -82,7 +86,9 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
             let start = src.get_loc(span.lo);
             let end = src.get_loc(span.hi);
 
-            if start.line == end.line {
+            if span.is_dummy() {
+                println!("!!! no snippet due to <dummy-span> !!!");
+            } else if start.line == end.line {
                 if let Some(line) = src.get_line(start.line) {
                     println!("{:>#4} {} {}",
                         Magenta.bold().paint(start.line),

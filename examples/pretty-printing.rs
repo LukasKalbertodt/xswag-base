@@ -36,11 +36,7 @@ fn main() {
         Span { lo: BytePos(block_lo), hi: BytePos(block_hi) }
     ).with_note("maybe because you are together?");
 
-    let opts = base::diag::PrintOptions {
-        unicode: true,
-        color: true,
-        line_wrap: true
-    };
+    let opts = base::diag::PrintOptions::default();
     base::diag::print(&e, &file, opts);
     base::diag::print(&w, &file, opts);
 }
