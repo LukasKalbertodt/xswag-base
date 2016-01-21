@@ -2,7 +2,7 @@
 
 use super::{Report, ReportKind, RemarkKind};
 use code::{FileMap, LineIdx};
-use term_painter::{ToStyle, Attr};
+use term_painter::ToStyle;
 use term_painter::Color::*;
 use std::default::Default;
 
@@ -41,9 +41,9 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         let start = src.get_loc(rep.span.lo);
         let end = src.get_loc(rep.span.hi);
         if start.line != end.line {
-            format!("{}-{}", start.line.0, end.line.0)
+            format!("{}-{}", start.line, end.line)
         } else {
-            start.line.0.to_string()
+            start.line.to_string()
         }
     };
 
