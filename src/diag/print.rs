@@ -1,9 +1,10 @@
 // TODO: get num cols of terminal dynamically
 
-use super::{Report, ReportKind, Remark, RemarkKind};
+use super::{Report, ReportKind, RemarkKind};
 use code::{FileMap, LineIdx};
-use term_painter::{ToStyle, Color, Attr};
+use term_painter::{ToStyle, Attr};
 use term_painter::Color::*;
+use std::default::Default;
 
 /// Options for printing
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -14,6 +15,16 @@ pub struct PrintOptions {
     pub color: bool,
     /// Is line wrapping allowed?
     pub line_wrap: bool,
+}
+
+impl Default for PrintOptions {
+    fn default() -> Self {
+        PrintOptions {
+            unicode: true,
+            color: true,
+            line_wrap: true,
+        }
+    }
 }
 
 
