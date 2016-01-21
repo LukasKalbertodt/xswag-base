@@ -32,7 +32,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
     // print header
     let title = match rep.kind {
         ReportKind::Error => White.bold().bg(Red).paint("ERROR"),
-        ReportKind::Warning => Attr::Bold.bg(Yellow).paint("WARNING"),
+        ReportKind::Warning => White.bold().bg(Yellow).paint("WARNING"),
     };
 
     let start = src.get_loc(rep.span.lo);
@@ -72,7 +72,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                 print!("           >  {0:>1$} ", " ", title_len);
                 col = 0;
             }
-            print!("{} ", White.paint(word));
+            print!("{} ", White.bold().paint(word));
             col += word_len + 1;
         }
         println!("");
