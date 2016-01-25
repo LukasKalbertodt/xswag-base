@@ -50,7 +50,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
     println!("+---- {} in {} : {} ----+",
         title,
         src.filename(),
-        Blue.paint(line)
+        Magenta.bold().paint(line)
     );
 
 
