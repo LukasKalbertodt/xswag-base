@@ -98,9 +98,12 @@ impl Span {
     }
 
     /// Checks if this span contains another span. A dummy span never contains
-    /// any other span (always returns `false`).
+    /// any other span and is never contained in another span.
     pub fn contains(&self, other: Self) -> bool {
-        !self.is_dummy() && self.lo <= other.lo && self.hi >= other.hi
+        !self.is_dummy()
+            && !other.is_dummy()
+            && self.lo <= other.lo
+            && self.hi >= other.hi
     }
 }
 
@@ -131,4 +134,59 @@ impl_math!(ColIdx, Sub, sub);
 pub struct Loc {
     pub line: LineIdx,
     pub col: ColIdx,
+}
+
+// --- tests ---
+#[test]
+fn basic_spans() {
+    use super::Span;
+
+    let s = Span::new(BytePos(3), BytePos(10));
+    assert_eq!(s, Span { lo: BytePos(3), hi: BytePos(10) });
+    assert_eq!(s, Span::from_pair((BytePos(3), BytePos(10))));
+    assert_eq!(s.len(), 7);
+    assert!(!s.is_dummy());
+
+    assert!(s.contains(Span::new(BytePos(4), BytePos(9))));
+    assert!(s.contains(Span::new(BytePos(3), BytePos(10))));
+    assert!(s.contains(Span::new(BytePos(5), BytePos(10))));
+    assert!(s.contains(Span::new(BytePos(3), BytePos(8))));
+    assert!(!s.contains(Span::new(BytePos(2), BytePos(8))));
+    assert!(!s.contains(Span::new(BytePos(3), BytePos(11))));
+    assert!(!s.contains(Span::new(BytePos(1), BytePos(12))));
+    assert!(!s.contains(Span::dummy()));
+
+    assert_eq!(Span::single(BytePos(15)), Span::new(BytePos(15), BytePos(16)));
+}
+
+#[test]
+fn dummy_spans() {
+    use super::Span;
+
+    let d = Span::dummy();
+    assert_eq!(d, Span::dummy());
+    assert_eq!(d.len(), 0);
+    assert!(d.is_dummy());
+
+    assert!(!d.contains(Span::new(BytePos(4), BytePos(9))));
+    assert!(!d.contains(Span::new(BytePos(3), BytePos(0))));
+    assert!(!d.contains(Span::dummy()));
+}
+
+#[test]
+fn span_hulls() {
+    use super::Span;
+
+    let d = Span::dummy();
+    let a = Span::new(BytePos(1), BytePos(5));
+    let b = Span::new(BytePos(3), BytePos(7));
+    let c = Span::new(BytePos(7), BytePos(9));
+
+    assert_eq!(a.hull(&d), a);
+    assert_eq!(d.hull(&a), a);
+    assert_eq!(d.hull(&d), d);
+
+    assert_eq!(a.hull(&b), Span::new(BytePos(1), BytePos(7)));
+    assert_eq!(a.hull(&c), Span::new(BytePos(1), BytePos(9)));
+    assert_eq!(b.hull(&c), Span::new(BytePos(3), BytePos(9)));
 }

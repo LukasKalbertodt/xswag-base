@@ -99,6 +99,7 @@ impl FileMap {
     }
 }
 
+// --- tests ---
 #[test]
 fn location_lookup() {
     let map = FileMap::new("<dummy>", "foo\r\nbär\nbaz");
