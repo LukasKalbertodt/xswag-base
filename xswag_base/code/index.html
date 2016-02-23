@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `code` mod in crate `xswag_base`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, code">
+
+    <title>xswag_base::code - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>xswag_base</a></p><script>window.sidebarCurrent = {name: 'code', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>xswag_base</a>::<wbr><a class='mod' href=''>code</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-5' class='srclink' href='../../src/xswag_base/code/mod.rs.html#1-11' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>This module contains types and functions to work on the raw source code.</p>
+
+<p>Currently we do not distinguish between code-map and file-map, since one
+file always contains the whole code so far. However, this might change!</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.BytePos.html'
+                               title='xswag_base::code::BytePos'>BytePos</a></td>
+                        <td class='docblock short'>
+                             <p>Position within source specified by byte offset. This is not equal to
+<code>CharPos</code> thanks to UTF-8 and multibyte chars. This type always represents
+positions relative to the whole codemap.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.ColIdx.html'
+                               title='xswag_base::code::ColIdx'>ColIdx</a></td>
+                        <td class='docblock short'>
+                             <p>Represents a column index.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.FileMap.html'
+                               title='xswag_base::code::FileMap'>FileMap</a></td>
+                        <td class='docblock short'>
+                             <p>Stores the content of a file and keeps track of some position meta data,
+such as linebreaks.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.LineIdx.html'
+                               title='xswag_base::code::LineIdx'>LineIdx</a></td>
+                        <td class='docblock short'>
+                             <p>Represents a line index.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Loc.html'
+                               title='xswag_base::code::Loc'>Loc</a></td>
+                        <td class='docblock short'>
+                             <p>Location within one file specified by line and column.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Span.html'
+                               title='xswag_base::code::Span'>Span</a></td>
+                        <td class='docblock short'>
+                             <p>A region within the source specified by first and last byte offset. <code>lo</code>
+byte is included in the span, <code>hi</code> byte is excluded.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.SrcOffset.html'
+                               title='xswag_base::code::SrcOffset'>SrcOffset</a></td>
+                        <td class='docblock short'>
+                             <p>Type do index one byte in a source code. It should be rather small, since
+it&#39;s used a lot.</p>
+
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "xswag_base";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

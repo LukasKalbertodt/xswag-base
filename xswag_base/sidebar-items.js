@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["code","This module contains types and functions to work on the raw source code."],["diag","Types and functions for error diagnostic and printing"]]});

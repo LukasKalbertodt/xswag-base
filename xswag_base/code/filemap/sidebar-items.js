@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["FileMap","Stores the content of a file and keeps track of some position meta data, such as linebreaks."]]});

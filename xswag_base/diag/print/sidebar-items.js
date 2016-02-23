@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["print","Pretty prints a report"]],"struct":[["PrintOptions","Options for printing on the terminal. By `default()` everything is enabled."]]});
