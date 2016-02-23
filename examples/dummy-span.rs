@@ -1,6 +1,6 @@
 extern crate xswag_base as base;
 
-use base::code::{SrcOffset, BytePos, Span, FileMap};
+use base::code::{Span, FileMap};
 use base::diag;
 
 const TEXT: &'static str = "no-content";
