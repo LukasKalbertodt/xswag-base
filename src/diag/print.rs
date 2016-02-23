@@ -1,4 +1,5 @@
 // TODO: get num cols of terminal dynamically
+// TODO: care about the given print options
 
 use super::{Report, ReportKind, RemarkKind};
 use code::{FileMap, LineIdx};
@@ -6,7 +7,7 @@ use term_painter::ToStyle;
 use term_painter::Color::*;
 use std::default::Default;
 
-/// Options for printing
+/// Options for printing on the terminal. By `default()` everything is enabled.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct PrintOptions {
     /// Use of unicode allowed?
@@ -27,7 +28,9 @@ impl Default for PrintOptions {
     }
 }
 
-
+/// Pretty prints a report
+///
+/// **Note**: right now, the `PrintOptions` are ignored.
 pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
     // print header
     let title = match rep.kind {
