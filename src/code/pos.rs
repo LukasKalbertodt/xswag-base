@@ -43,7 +43,7 @@ pub struct Span {
 impl Span {
     /// Creates a span that points to a single char
     pub fn single(pos: BytePos) -> Span {
-        Span { lo: pos, hi: pos }
+        Span { lo: pos, hi: pos + BytePos(1) }
     }
 
     /// Creates a span from a lo and hi (shorter than struct constructor
