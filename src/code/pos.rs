@@ -37,7 +37,9 @@ impl_math!(BytePos, Sub, sub);
 /// byte is included in the span, `hi` byte is excluded.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Span {
+    /// Low byte, inclusive
     pub lo: BytePos,
+    /// High byte, exclusive
     pub hi: BytePos,
 }
 
