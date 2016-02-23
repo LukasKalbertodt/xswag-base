@@ -41,27 +41,33 @@ pub struct Span {
 }
 
 impl Span {
-    /// Creates a Span that points to a single char
+    /// Creates a span that points to a single char
     pub fn single(pos: BytePos) -> Span {
         Span { lo: pos, hi: pos }
     }
 
+    /// Creates a span from a lo and hi (shorter than struct constructor
+    /// syntax)
     pub fn new(lo: BytePos, hi: BytePos) -> Span {
         Span { lo: lo, hi: hi }
     }
 
+    /// Creates a span from a tuple
     pub fn from_pair((lo, hi): (BytePos, BytePos)) -> Span {
         Span { lo: lo, hi: hi }
     }
 
+    /// Creates a dummy span. Should be used with caution.
     pub fn dummy() -> Span {
         Span { lo: BytePos(1), hi: BytePos(0) }
     }
 
+    /// Checks if the this span is a dummy span
     pub fn is_dummy(&self) -> bool {
         self.lo.0 == 1 && self.hi.0 == 0
     }
 
+    /// Returns the length (number of bytes) of the span
     pub fn len(&self) -> SrcOffset {
         (self.hi - self.lo).0
     }
