@@ -1,3 +1,5 @@
+//! Types and functions for error diagnostic and printing
+//!
 
 mod report;
 mod print;

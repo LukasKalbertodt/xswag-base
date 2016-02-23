@@ -2,15 +2,22 @@ use code::Span;
 
 /// Describes some kind of problem or occurrence in the code. Contains one or
 /// more remarks with descriptions and separate code spans.
+///
+/// This type doesn't provide a `Display` impl, since all spans reference an
+/// external filemap which needs to be provided. Use `print` methods of the
+/// `diag` module instead.
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Report {
+    /// Kind of the report (usually the same as the first remark kind)
     pub kind: ReportKind,
+    /// Span of the main code snippet
     pub span: Span,
+    /// List of remarks describing the report
     pub remarks: Vec<Remark>,
 }
 
 impl Report {
-    /// Creates a error report with one message and one span.
+    /// Creates a error report with one message and one span
     pub fn simple_error<S: Into<String>>(msg: S, span: Span) -> Report {
         Report {
             kind: ReportKind::Error,
@@ -23,7 +30,7 @@ impl Report {
         }
     }
 
-    /// Creates a warning report with one message and one span.
+    /// Creates a warning report with one message and one span
     pub fn simple_warning<S: Into<String>>(msg: S, span: Span) -> Report {
         Report {
             kind: ReportKind::Warning,
@@ -63,7 +70,9 @@ impl Report {
 /// `RemarkType` -- may be merged with it in the future.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ReportKind {
+    /// Something went very wrong and will stop further processing
     Error,
+    /// Something important should be fixed, but doesn't stop processing
     Warning,
 }
 
@@ -72,13 +81,18 @@ pub enum ReportKind {
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Remark {
     pub kind: RemarkKind,
+    /// Remark description
     pub desc: String,
     pub span: Option<Span>,
 }
 
+/// Kinds of remarks
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum RemarkKind {
+    /// Something went very wrong and will stop further processing
     Error,
+    /// Something important should be fixed, but doesn't stop processing
     Warning,
+    /// Additional information about an error or a warning
     Note,
 }
