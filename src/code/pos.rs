@@ -2,6 +2,7 @@
 //!
 
 use std::ops::{Add, Sub};
+use std::cmp::{min, max};
 
 // Helps implementing basic operators, like `Add` and `Sub`
 macro_rules! impl_math {
@@ -67,9 +68,37 @@ impl Span {
         self.lo.0 == 1 && self.hi.0 == 0
     }
 
-    /// Returns the length (number of bytes) of the span
+    /// Returns the length (number of bytes) of the span or 0 if it's a dummy
+    /// span
     pub fn len(&self) -> SrcOffset {
-        (self.hi - self.lo).0
+        if self.is_dummy() {
+            0
+        } else {
+            (self.hi - self.lo).0
+        }
+    }
+
+    /// Returns the smallest span which encloses both given spans
+    ///
+    /// If one of given spans is a dummy span, it is ignored and the other span
+    /// is returned. If both spans are dummy spans, a dummy span is returned.
+    pub fn hull(&self, other: &Self) -> Span {
+        if self.is_dummy() {
+            *other
+        } else if other.is_dummy() {
+            *self
+        } else {
+            Span {
+                lo: min(self.lo, other.lo),
+                hi: max(self.hi, other.hi),
+            }
+        }
+    }
+
+    /// Checks if this span contains another span. A dummy span never contains
+    /// any other span (always returns `false`).
+    pub fn contains(&self, other: Self) -> bool {
+        !self.is_dummy() && self.lo <= other.lo && self.hi >= other.hi
     }
 }
 
