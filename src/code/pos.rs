@@ -3,6 +3,7 @@
 
 use std::ops::{Add, Sub};
 use std::cmp::{min, max};
+use std::fmt;
 
 // Helps implementing basic operators, like `Add` and `Sub`
 macro_rules! impl_math {
@@ -35,7 +36,7 @@ impl_math!(BytePos, Sub, sub);
 // ----------------------------------------------------------------------------
 /// A region within the source specified by first and last byte offset. `lo`
 /// byte is included in the span, `hi` byte is excluded.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Span {
     /// Low byte, inclusive
     pub lo: BytePos,
@@ -104,6 +105,13 @@ impl Span {
             && !other.is_dummy()
             && self.lo <= other.lo
             && self.hi >= other.hi
+    }
+}
+
+// custom `Debug` impl to shorten debug output and improve readability
+impl fmt::Debug for Span {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "@({}, {})", self.lo.0, self.hi.0)
     }
 }
 
