@@ -54,7 +54,7 @@ impl FileMap {
 
     /// Returns the (0-based) index of the line in which the byte with the
     /// given `offset` lives.
-    fn get_line_idx(&self, offset: BytePos) -> LineIdx {
+    pub fn get_line_idx(&self, offset: BytePos) -> LineIdx {
         // If `offset` is not a line beginning, `binary_search` returns the
         // index of the next line. Hence `-1`.
         LineIdx(self.lines.borrow()
@@ -79,6 +79,11 @@ impl FileMap {
                           .unwrap_or(self.src.len() - start as usize);
             &self.src[start as usize .. (end + start as usize)]
         })
+    }
+
+    /// Returns the byte offset of the first symbol in `line`
+    pub fn get_line_start(&self, line: LineIdx) -> Option<BytePos> {
+        self.lines.borrow().get(line.0 as usize).map(|&pos| pos)
     }
 
     /// Searches for line endings and collects all line beginnings in the
