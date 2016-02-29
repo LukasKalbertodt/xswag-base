@@ -1,7 +1,7 @@
 //! Types and functions dealing with positions within the source code
 //!
 
-use std::ops::{Add, Sub};
+use std::ops::{self, Add, Sub};
 use std::cmp::{min, max};
 use std::fmt;
 
@@ -106,6 +106,14 @@ impl Span {
             && self.lo <= other.lo
             && self.hi >= other.hi
     }
+
+    /// Returns a range for indexing strings and vectors
+    pub fn into_range(self) -> ops::Range<usize> {
+        ops::Range {
+            start: self.lo.0 as usize,
+            end: self.hi.0 as usize,
+        }
+    }
 }
 
 // custom `Debug` impl to shorten debug output and improve readability
@@ -121,8 +129,8 @@ impl fmt::Debug for Span {
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Default)]
 pub struct LineIdx(pub SrcOffset);
 
-impl ::std::fmt::Display for LineIdx {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+impl fmt::Display for LineIdx {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         (self.0 + 1).fmt(f)
     }
 }
