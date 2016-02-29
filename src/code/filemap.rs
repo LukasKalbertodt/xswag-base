@@ -1,9 +1,9 @@
 use super::{SrcOffset, BytePos, LineIdx, ColIdx, Loc};
 use std::cell::RefCell;
+use std::fmt;
 
 /// Stores the content of a file and keeps track of some position meta data,
 /// such as linebreaks.
-#[derive(Debug)]
 pub struct FileMap {
     /// Original filename or dummy filename of the form "<...>"
     filename: String,
@@ -97,6 +97,24 @@ impl FileMap {
                 self.lines.borrow_mut().push(BytePos(line_start));
             }
         }
+    }
+}
+
+impl fmt::Debug for FileMap {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        struct Dummy<'a>(&'a [BytePos]);
+        impl<'a> fmt::Debug for Dummy<'a> {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                let items = self.0.iter().map(|v| v.0).enumerate();
+                f.debug_map().entries(items).finish()
+            }
+        }
+
+        f.debug_struct("FileMap")
+            .field("filename", &self.filename)
+            .field("src", &format!("<long string> (len {})", self.src.len()))
+            .field("lines", &Dummy(&self.lines.borrow()))
+            .finish()
     }
 }
 

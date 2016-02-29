@@ -1,4 +1,5 @@
 extern crate xswag_base as base;
+extern crate env_logger;
 
 use base::code::{SrcOffset, BytePos, Span, FileMap};
 use base::diag::Report;
@@ -11,6 +12,8 @@ But you can't know for sure. Yet it doesn't matter.
 How can it not matter to you where that train will take you?";
 
 fn main() {
+    env_logger::init().unwrap();
+
     let file = FileMap::new("src/examples/train.txt", TEXT);
     file.find_lines();
 
