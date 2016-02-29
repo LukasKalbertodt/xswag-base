@@ -101,6 +101,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                 println!("!!! no snippet due to <dummy-span> !!!");
             } else if start.line == end.line {
                 if let Some(line_orig) = src.get_line(start.line) {
+                    trace!("Printing single line span. Line: {:?}", line_orig);
                     // replace tabs
                     let line = line_orig.replace("\t", "    ");
                     let num_tabs = line_orig[..start.col.0 as usize]
