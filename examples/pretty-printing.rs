@@ -6,7 +6,7 @@ use base::diag::Report;
 const TEXT: &'static str = "\
 You're waiting for a train.
 A train that'll take you far away.
-You know where you hope this triain will take you.
+	You know where you hope this triain will take you.
 But you can't know for sure. Yet it doesn't matter.
 How can it not matter to you where that train will take you?";
 

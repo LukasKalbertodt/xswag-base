@@ -100,18 +100,30 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
             if span.is_dummy() {
                 println!("!!! no snippet due to <dummy-span> !!!");
             } else if start.line == end.line {
-                if let Some(line) = src.get_line(start.line) {
-                    println!("{:>#4} {} {}",
+                if let Some(line_orig) = src.get_line(start.line) {
+                    // replace tabs
+                    let line = line_orig.replace("\t", "    ");
+                    let num_tabs = line_orig[..start.col.0 as usize]
+                        .chars()
+                        .filter(|&c| c == '\t')
+                        .count();
+
+                    // print line (with marked span section)
+                    let startcol = start.col.0 as usize + 3*num_tabs;
+                    let endcol = end.col.0 as usize + 3*num_tabs;
+                    println!("{:>#4} {} {}{}{}",
                         Magenta.bold().paint(start.line),
                         Magenta.bold().paint("|"),
-                        line
+                        &line[..startcol],
+                        Yellow.paint(&line[startcol..endcol]),
+                        &line[endcol..],
                     );
 
                     Yellow.with(|| {
                         println!("       {: <2$}{:-<3$}",
                             " ", "^",
-                            start.col.0 as usize,
-                            (end.col.0 - start.col.0) as usize
+                            startcol,
+                            endcol - startcol,
                         );
                     });
                 }
