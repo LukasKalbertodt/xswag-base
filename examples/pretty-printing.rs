@@ -9,7 +9,7 @@ You're waiting for a train.
 A train that'll take you far away.
 	You know where you hope this triain will take you.
 But you can't know for sure. Yet it doesn't matter.
-How can it not matter to you where that train will take you?";
+How can it not matter to you where that train will take you? Because...";
 
 fn main() {
     env_logger::init().unwrap();
@@ -20,8 +20,8 @@ fn main() {
     let first = TEXT.find("train").unwrap() as SrcOffset;
     let second = TEXT.find("triain").unwrap() as SrcOffset;
 
-    let block_lo = TEXT.find("But you can't").unwrap() as SrcOffset;
-    let block_hi = TEXT.len() as SrcOffset;
+    let block_lo = TEXT.find("Yet it").unwrap() as SrcOffset;
+    let block_hi = TEXT.find("? Because").unwrap() as SrcOffset + 1;
 
 
     let e = Report::simple_error(

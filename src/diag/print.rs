@@ -129,7 +129,20 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                     });
                 }
             } else {
-                for line_idx in start.line.0..end.line.0 + 1 {
+                // print first line
+                if let Some(line) = src.get_line(start.line) {
+                    let startcol = start.col.0 as usize;
+                    println!("{:>#4} {} {}{}",
+                        Magenta.bold().paint(start.line),
+                        Magenta.bold().paint("|"),
+                        &line[..startcol],
+                        Yellow.paint(&line[startcol..]),
+                    );
+                }
+
+
+                // print all lines that are completely in the span
+                for line_idx in (start.line.0 + 1)..end.line.0 {
                     let line_idx = LineIdx(line_idx);
                     if let Some(line) = src.get_line(line_idx) {
                         println!("{:>#4} {} {}",
@@ -138,6 +151,17 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                             line
                         );
                     }
+                }
+
+                // print last line
+                if let Some(line) = src.get_line(end.line) {
+                    let endcol = end.col.0 as usize;
+                    println!("{:>#4} {} {}{}",
+                        Magenta.bold().paint(end.line),
+                        Magenta.bold().paint("|"),
+                        Yellow.paint(&line[..endcol]),
+                        &line[endcol..],
+                    );
                 }
             }
             println!("");
