@@ -121,7 +121,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
                     );
 
                     Yellow.with(|| {
-                        println!("       {: <2$}{:-<3$}",
+                        println!("       {: <2$}{:^<3$}",
                             " ", "^",
                             startcol,
                             endcol - startcol,
