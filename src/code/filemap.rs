@@ -3,6 +3,7 @@ use std::cell::RefCell;
 
 /// Stores the content of a file and keeps track of some position meta data,
 /// such as linebreaks.
+#[derive(Debug)]
 pub struct FileMap {
     /// Original filename or dummy filename of the form "<...>"
     filename: String,

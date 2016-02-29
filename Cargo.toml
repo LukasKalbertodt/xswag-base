@@ -10,3 +10,4 @@ license = "MIT"
 
 [dependencies]
 term-painter = "0.2"
+log = "0.3"

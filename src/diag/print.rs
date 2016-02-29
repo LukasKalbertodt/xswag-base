@@ -32,6 +32,9 @@ impl Default for PrintOptions {
 ///
 /// **Note**: right now, the `PrintOptions` are ignored.
 pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
+    trace!("Printing report: {:#?}", rep);
+    trace!("Printing with filemap: {:#?}", src);
+
     // print header
     let title = match rep.kind {
         ReportKind::Error => White.bold().bg(Red).paint("ERROR"),
@@ -43,6 +46,8 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
     } else {
         let start = src.get_loc(rep.span.lo);
         let end = src.get_loc(rep.span.hi);
+        trace!("Span is from {:?} to {:?}", start, end);
+
         if start.line != end.line {
             format!("{}-{}", start.line, end.line)
         } else {
@@ -59,6 +64,8 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
 
 
     for rem in &rep.remarks {
+        trace!("Handling Remark {:?}", rem);
+
         // print message
         let (title, title_len) = match rem.kind {
             RemarkKind::Error => (Red.paint("error:"), 6),
@@ -88,6 +95,7 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         if let Some(span) = rem.span {
             let start = src.get_loc(span.lo);
             let end = src.get_loc(span.hi);
+            trace!("Span is from {:?} to {:?}", start, end);
 
             if span.is_dummy() {
                 println!("!!! no snippet due to <dummy-span> !!!");
