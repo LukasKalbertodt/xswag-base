@@ -11,7 +11,7 @@ pub struct Report {
     /// Kind of the report (usually the same as the first remark kind)
     pub kind: ReportKind,
     /// Span of the main code snippet
-    pub span: Span,
+    pub span: Option<Span>,
     /// List of remarks describing the report
     pub remarks: Vec<Remark>,
 }
@@ -21,7 +21,7 @@ impl Report {
     pub fn simple_error<S: Into<String>>(msg: S, span: Span) -> Report {
         Report {
             kind: ReportKind::Error,
-            span: span,
+            span: Some(span),
             remarks: vec![Remark {
                 kind: RemarkKind::Error,
                 desc: msg.into(),
@@ -30,11 +30,24 @@ impl Report {
         }
     }
 
+    /// Creates a error report with one message, but without span
+    pub fn simple_spanless_error<S: Into<String>>(msg: S) -> Report {
+        Report {
+            kind: ReportKind::Error,
+            span: None,
+            remarks: vec![Remark {
+                kind: RemarkKind::Error,
+                desc: msg.into(),
+                span: None,
+            }],
+        }
+    }
+
     /// Creates a warning report with one message and one span
     pub fn simple_warning<S: Into<String>>(msg: S, span: Span) -> Report {
         Report {
             kind: ReportKind::Warning,
-            span: span,
+            span: Some(span),
             remarks: vec![Remark {
                 kind: RemarkKind::Warning,
                 desc: msg.into(),

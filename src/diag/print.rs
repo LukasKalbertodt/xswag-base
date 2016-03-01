@@ -41,23 +41,28 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         ReportKind::Warning => White.bold().bg(Yellow).paint("WARNING"),
     };
 
-    let line = if rep.span.is_dummy() {
-        "<dummy-span>".into()
-    } else {
-        let start = src.get_loc(rep.span.lo);
-        let end = src.get_loc(rep.span.hi);
-        trace!("Span is from {:?} to {:?}", start, end);
-
-        if start.line != end.line {
-            format!("{}-{}", start.line, end.line)
+    let (sep, line) = if let Some(span) = rep.span {
+        (" : ", if span.is_dummy() {
+            "<dummy-span>".into()
         } else {
-            start.line.to_string()
-        }
+            let start = src.get_loc(span.lo);
+            let end = src.get_loc(span.hi);
+            trace!("Span is from {:?} to {:?}", start, end);
+
+            if start.line != end.line {
+                format!("{}-{}", start.line, end.line)
+            } else {
+                start.line.to_string()
+            }
+        })
+    } else {
+        ("", "".into())
     };
 
-    println!("+---- {} in {} : {} ----+",
+    println!("+---- {} in {}{}{} ----+",
         title,
         src.filename(),
+        sep,
         Magenta.bold().paint(line)
     );
 
