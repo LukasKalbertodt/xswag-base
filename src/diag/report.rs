@@ -132,8 +132,7 @@ pub enum Snippet {
     /// Show original code, but replace a part of it with something new and
     /// highlight the new part. Hint: also able to only insert.
     Replace {
-        orig_span: Span,
-        replace_span: Span,
-        replace_with: String,
+        span: Span,
+        with: String,
     }
 }
