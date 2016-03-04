@@ -50,6 +50,11 @@ impl Span {
         Span { lo: pos, hi: pos + BytePos(1) }
     }
 
+    /// Crates an empty span (points between to chars)
+    pub fn empty_at(pos: BytePos) -> Span {
+        Span { lo: pos, hi: pos }
+    }
+
     /// Creates a span from a lo and hi (shorter than struct constructor
     /// syntax)
     pub fn new(lo: BytePos, hi: BytePos) -> Span {
@@ -69,6 +74,11 @@ impl Span {
     /// Checks if the this span is a dummy span
     pub fn is_dummy(&self) -> bool {
         self.lo.0 == 1 && self.hi.0 == 0
+    }
+
+    /// Checks if the span is empty
+    pub fn is_empty(&self) -> bool {
+        self.lo == self.hi
     }
 
     /// Returns the length (number of bytes) of the span or 0 if it's a dummy

@@ -22,11 +22,7 @@ impl Report {
         Report {
             kind: ReportKind::Error,
             span: Some(span),
-            remarks: vec![Remark {
-                kind: RemarkKind::Error,
-                desc: msg.into(),
-                span: Some(span),
-            }],
+            remarks: vec![Remark::error(msg, Snippet::Orig(span))],
         }
     }
 
@@ -35,11 +31,7 @@ impl Report {
         Report {
             kind: ReportKind::Error,
             span: None,
-            remarks: vec![Remark {
-                kind: RemarkKind::Error,
-                desc: msg.into(),
-                span: None,
-            }],
+            remarks: vec![Remark::error(msg, Snippet::None)],
         }
     }
 
@@ -48,33 +40,25 @@ impl Report {
         Report {
             kind: ReportKind::Warning,
             span: Some(span),
-            remarks: vec![Remark {
-                kind: RemarkKind::Warning,
-                desc: msg.into(),
-                span: Some(span),
-            }],
+            remarks: vec![Remark::warning(msg, Snippet::Orig(span))],
         }
     }
 
     /// Adds a note without a span/code snippet to the existing Report
-    pub fn with_note<S: Into<String>>(mut self, msg: S) -> Report {
-        self.remarks.push(Remark {
-            kind: RemarkKind::Note,
-            desc: msg.into(),
-            span: None,
-        });
-        self
+    pub fn with_note<S: Into<String>>(self, msg: S) -> Report {
+        self.with_remark(Remark::note(msg, Snippet::None))
     }
 
     /// Adds a note with a span/code snippet to the existing Report
-    pub fn with_span_note<S: Into<String>>(mut self, msg: S, span: Span)
+    pub fn with_span_note<S: Into<String>>(self, msg: S, span: Span)
         -> Report
     {
-        self.remarks.push(Remark {
-            kind: RemarkKind::Note,
-            desc: msg.into(),
-            span: Some(span),
-        });
+        self.with_remark(Remark::note(msg, Snippet::Orig(span)))
+    }
+
+    /// Adds a remark to the returned Report
+    pub fn with_remark(mut self, rem: Remark) -> Report {
+        self.remarks.push(rem);
         self
     }
 }
@@ -96,7 +80,35 @@ pub struct Remark {
     pub kind: RemarkKind,
     /// Remark description
     pub desc: String,
-    pub span: Option<Span>,
+    pub snippet: Snippet,
+}
+
+impl Remark {
+    /// Creates a new remark with the given parameters
+    pub fn new<S: Into<String>>(kind: RemarkKind, desc: S, snippet: Snippet)
+        -> Self
+    {
+        Remark {
+            kind: kind,
+            desc: desc.into(),
+            snippet: snippet,
+        }
+    }
+
+    /// Creates a new remark of kind `Error` with the given parameters
+    pub fn error<S: Into<String>>(desc: S, snippet: Snippet) -> Self {
+        Self::new(RemarkKind::Error, desc, snippet)
+    }
+
+    /// Creates a new remark of kind `Warning` with the given parameters
+    pub fn warning<S: Into<String>>(desc: S, snippet: Snippet) -> Self {
+        Self::new(RemarkKind::Warning, desc, snippet)
+    }
+
+    /// Creates a new remark of kind `Note` with the given parameters
+    pub fn note<S: Into<String>>(desc: S, snippet: Snippet) -> Self {
+        Self::new(RemarkKind::Note, desc, snippet)
+    }
 }
 
 /// Kinds of remarks
@@ -108,4 +120,20 @@ pub enum RemarkKind {
     Warning,
     /// Additional information about an error or a warning
     Note,
+}
+
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Snippet {
+    /// No snippet
+    None,
+    /// Show the original code with this highlighted span
+    Orig(Span),
+    /// Show original code, but replace a part of it with something new and
+    /// highlight the new part. Hint: also able to only insert.
+    Replace {
+        orig_span: Span,
+        replace_span: Span,
+        replace_with: String,
+    }
 }
