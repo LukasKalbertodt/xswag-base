@@ -133,12 +133,6 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
         let line_orig = expect_line(src, start.line);
         trace!("Printing single line span. Orig line: {:?}", line_orig);
 
-        // let mut line = line_orig;
-        // // replace string if requested
-        // if let Snippet::Replace { replace_span, replace_with, .. } = snippet {
-
-        // }
-
         // replace tabs
         let line = line_orig.replace("\t", "    ");
         let num_tabs = line_orig[..start.col.0 as usize]
@@ -150,41 +144,33 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
         let startcol = start.col.0 as usize + 3*num_tabs;
         let endcol = end.col.0 as usize + 3*num_tabs;
 
-        print!(
-            "{:>#4} {} ",
+        let (middle, underline_len, color) = match *snippet {
+            Snippet::Replace { ref with, .. } => {
+                (&with[..], with.len(), Green)
+            },
+            Snippet::Orig(_) =>  {
+                (&line[startcol..endcol], endcol - startcol, Yellow)
+            },
+            _ => unreachable!(),
+        };
+
+        // print the line
+        println!("{:>#4} {} {}{}{}",
             Magenta.bold().paint(start.line),
-            Magenta.bold().paint("|")
+            Magenta.bold().paint("|"),
+            &line[..startcol],
+            color.paint(middle),
+            &line[endcol..],
         );
-        if let &Snippet::Replace { span, ref with } = snippet {
-            println!("{}{}{}",
-                &line[..startcol],
-                Green.paint(with),
-                &line[endcol..],
-            );
 
-            Green.with(|| {
-                println!("      {: <2$}{:^<3$}",
-                    " ", "^",
-                    startcol + 1,
-                    with.len(),
-                );
-            });
-        } else {
-            // print line (with marked span section)
-            println!("{}{}{}",
-                &line[..startcol],
-                Yellow.paint(&line[startcol..endcol]),
-                &line[endcol..],
+        // print the underline
+        color.with(|| {
+            println!("      {: <2$}{:^<3$}",
+                " ", "^",
+                startcol + 1,
+                underline_len,
             );
-
-            Yellow.with(|| {
-                println!("      {: <2$}{:^<3$}",
-                    " ", "^",
-                    startcol + 1,
-                    endcol - startcol,
-                );
-            });
-        }
+        });
     }
 
     // ----- Multiline -----
@@ -226,7 +212,6 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
     }
 }
 
-fn expect_line(src: &FileMap, loc: Loc) -> &str {
-    src.get_line(start.line)
-        .expect("`Loc` from FileMap should return a valid line")
+fn expect_line(src: &FileMap, line: LineIdx) -> &str {
+    src.get_line(line).expect("`Loc` from FileMap should return a valid line")
 }
