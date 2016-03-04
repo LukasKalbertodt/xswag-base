@@ -175,38 +175,75 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
 
     // ----- Multiline -----
     else {
-        // print first line
-        if let Some(line) = src.get_line(start.line) {
-            let startcol = start.col.0 as usize;
-            println!("{:>#4} {} {}{}",
-                Magenta.bold().paint(start.line),
+        let (lines, color) = match *snippet {
+            Snippet::Replace { ref with, .. } => {
+                let mut lines = Vec::new();
+
+                if let Some(first_break) =  with.find("\n") {
+                    // we can unwrap, because we found it from the beginning
+                    let last_break = with.rfind("\n").unwrap();
+
+                    // first line
+                    let line = expect_line(src, start.line);
+                    let startcol = start.col.0 as usize;
+                    lines.push((&line[..startcol], &with[..first_break], ""));
+
+                    // lines in the middle
+                    for line in with[..last_break].lines().skip(1) {
+                        lines.push(("", line, ""));
+                    }
+
+                    // last line
+                    let line = expect_line(src, end.line);
+                    let endcol = end.col.0 as usize;
+                    lines.push(("", &with[last_break + 1..], &line[endcol..]));
+
+                    (lines, Green)
+                } else {
+                    let first_line = expect_line(src, start.line);
+                    let startcol = start.col.0 as usize;
+                    let last_line = expect_line(src, end.line);
+                    let endcol = end.col.0 as usize;
+
+                    (vec![(
+                        &first_line[..startcol],
+                        &with[..],
+                        &last_line[endcol..]
+                    )], Green)
+                }
+            },
+            Snippet::Orig(_) =>  {
+                let mut lines = Vec::new();
+
+                // first line
+                let line = expect_line(src, start.line);
+                let startcol = start.col.0 as usize;
+                lines.push((&line[..startcol], &line[startcol..], ""));
+
+                // lines in the middle
+                for line_idx in (start.line.0 + 1)..end.line.0 {
+                    let line = expect_line(src, LineIdx(line_idx));
+                    lines.push(("", line, ""));
+                }
+
+                // last line
+                let line = expect_line(src, end.line);
+                let endcol = end.col.0 as usize;
+                lines.push(("", &line[..endcol], &line[endcol..]));
+
+                (lines, Yellow)
+            },
+            _ => unreachable!(),
+        };
+
+
+        for (i, &(pre, middle, post)) in lines.iter().enumerate() {
+            println!("{:>#4} {} {}{}{}",
+                Magenta.bold().paint(start.line + LineIdx(i as u32)),
                 Magenta.bold().paint("|"),
-                &line[..startcol],
-                Yellow.paint(&line[startcol..]),
-            );
-        }
-
-
-        // print all lines that are completely in the span
-        for line_idx in (start.line.0 + 1)..end.line.0 {
-            let line_idx = LineIdx(line_idx);
-            if let Some(line) = src.get_line(line_idx) {
-                println!("{:>#4} {} {}",
-                    Magenta.bold().paint(line_idx),
-                    Magenta.bold().paint("|"),
-                    line
-                );
-            }
-        }
-
-        // print last line
-        if let Some(line) = src.get_line(end.line) {
-            let endcol = end.col.0 as usize;
-            println!("{:>#4} {} {}{}",
-                Magenta.bold().paint(end.line),
-                Magenta.bold().paint("|"),
-                Yellow.paint(&line[..endcol]),
-                &line[endcol..],
+                pre,
+                color.paint(middle),
+                post,
             );
         }
     }

@@ -12,6 +12,7 @@ But you can't know for sure. Yet it doesn't matter.
 How can it not matter to you where that train will take you? Because...
 
 -- by HAL9000,
+      (the spirit of the forest)
  from The Lion King ...";
 
 fn main() {
@@ -53,7 +54,7 @@ fn main() {
             "please use the real source instead",
             Snippet::Replace {
                 span: quote_span,
-                with: "Mal\n from Inception".into()
+                with: "Mal\n fuck\n from Inception".into()
             },
         ));
 
