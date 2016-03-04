@@ -9,7 +9,10 @@ You're waiting for a train.
 A train that'll take you far cheese
 	You know where you hope this triain will take you.
 But you can't know for sure. Yet it doesn't matter.
-How can it not matter to you where that train will take you? Because...";
+How can it not matter to you where that train will take you? Because...
+
+-- by HAL9000,
+ from The Lion King ...";
 
 fn main() {
     env_logger::init().unwrap();
@@ -25,6 +28,9 @@ fn main() {
 
     let cheese = TEXT.find("cheese").unwrap() as SrcOffset;
 
+    let hal9 = TEXT.find("HAL9000").unwrap() as SrcOffset;
+    let king = TEXT.find("King").unwrap() as SrcOffset + 4;
+
 
     let e = Report::simple_error(
         "unknown symbol `trian`. Did you mean `train`?",
@@ -35,10 +41,20 @@ fn main() {
     );
 
     let cheese_span = Span::new(BytePos(cheese), BytePos(cheese + 6));
-    let e2 = Report::simple_error( "incorrect quote from movie", cheese_span)
+    let e2 = Report::simple_error("incorrect quote from movie", cheese_span)
         .with_remark(Remark::note(
             "consider replacing it as shown below",
             Snippet::Replace { span: cheese_span, with: "away.".into() },
+        ));
+
+    let quote_span = Span::new(BytePos(hal9), BytePos(king));
+    let e3 = Report::simple_error("this is just wrong!", quote_span)
+        .with_remark(Remark::note(
+            "please use the real source instead",
+            Snippet::Replace {
+                span: quote_span,
+                with: "Mal\n from Inception".into()
+            },
         ));
 
     let w = Report::simple_warning(
@@ -51,5 +67,6 @@ fn main() {
     let opts = base::diag::PrintOptions::default();
     base::diag::print(&e, &file, opts);
     base::diag::print(&e2, &file, opts);
+    base::diag::print(&e3, &file, opts);
     base::diag::print(&w, &file, opts);
 }
