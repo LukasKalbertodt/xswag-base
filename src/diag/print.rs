@@ -130,9 +130,7 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
 
     // ----- Singleline -----
     else if start.line == end.line {
-        let line_orig = src
-            .get_line(start.line)
-            .expect("`Loc` from FileMap should return a valid line");
+        let line_orig = expect_line(src, start.line);
         trace!("Printing single line span. Orig line: {:?}", line_orig);
 
         // let mut line = line_orig;
@@ -226,4 +224,9 @@ fn print_snippet(src: &FileMap, snippet: &Snippet) {
             );
         }
     }
+}
+
+fn expect_line(src: &FileMap, loc: Loc) -> &str {
+    src.get_line(start.line)
+        .expect("`Loc` from FileMap should return a valid line")
 }
