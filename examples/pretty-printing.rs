@@ -54,7 +54,7 @@ fn main() {
             "please use the real source instead",
             Snippet::Replace {
                 span: quote_span,
-                with: "Mal\n fuck\n from Inception".into()
+                with: "Mal\n from Inception".into()
             },
         ));
 

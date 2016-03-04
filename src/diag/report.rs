@@ -136,3 +136,14 @@ pub enum Snippet {
         with: String,
     }
 }
+
+impl Snippet {
+    /// Returns the span if it exists
+    pub fn span(&self) -> Option<Span> {
+        match *self {
+            Snippet::None => None,
+            Snippet::Orig(span) => Some(span),
+            Snippet::Replace { span, ..} => Some(span),
+        }
+    }
+}

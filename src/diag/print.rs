@@ -2,7 +2,7 @@
 // TODO: care about the given print options
 
 use super::{Report, ReportKind, RemarkKind, Snippet};
-use code::{FileMap, LineIdx};
+use code::{FileMap, LineIdx, Span};
 use term_painter::ToStyle;
 use term_painter::Color::*;
 use std::default::Default;
@@ -97,24 +97,15 @@ pub fn print(rep: &Report, src: &FileMap, _: PrintOptions) {
         println!("");
 
         // print code snippet
-        match rem.snippet {
-            Snippet::Orig(_) | Snippet::Replace { .. } => {
-                print_snippet(src, &rem.snippet);
-                println!("");
-            },
-            _ => {},
+        if let Some(span) = rem.snippet.span() {
+            print_snippet(src, span, &rem.snippet);
+            println!("");
         }
     }
     println!("");
 }
 
-fn print_snippet(src: &FileMap, snippet: &Snippet) {
-    let span = match *snippet {
-        Snippet::Orig(span) => span,
-        Snippet::Replace { span, .. } => span,
-        _ => unreachable!(),
-    };
-
+fn print_snippet(src: &FileMap, span: Span, snippet: &Snippet) {
     let start = src.get_loc(span.lo);
     let end = src.get_loc(span.hi);
     trace!("Span is from {:?} to {:?}", start, end);
