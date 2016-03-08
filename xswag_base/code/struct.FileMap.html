@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-337' class='srclink' href='../../src/xswag_base/code/filemap.rs.html#6-19' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-346' class='srclink' href='../../src/xswag_base/code/filemap.rs.html#7-20' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct FileMap {
     // some fields omitted
 }</pre><div class='docblock'><p>Stores the content of a file and keeps track of some position meta data,
@@ -61,11 +61,16 @@ content of the file.</p>
 beginnings need to be added in order!</p>
 </div><h4 id='method.num_lines' class='method'><code>fn <a href='#method.num_lines' class='fnname'>num_lines</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
 <div class='docblock'><p>Returns the number of lines.</p>
+</div><h4 id='method.get_line_idx' class='method'><code>fn <a href='#method.get_line_idx' class='fnname'>get_line_idx</a>(&amp;self, offset: <a class='struct' href='../../xswag_base/code/struct.BytePos.html' title='xswag_base::code::BytePos'>BytePos</a>) -&gt; <a class='struct' href='../../xswag_base/code/struct.LineIdx.html' title='xswag_base::code::LineIdx'>LineIdx</a></code></h4>
+<div class='docblock'><p>Returns the (0-based) index of the line in which the byte with the
+given <code>offset</code> lives.</p>
 </div><h4 id='method.get_loc' class='method'><code>fn <a href='#method.get_loc' class='fnname'>get_loc</a>(&amp;self, offset: <a class='struct' href='../../xswag_base/code/struct.BytePos.html' title='xswag_base::code::BytePos'>BytePos</a>) -&gt; <a class='struct' href='../../xswag_base/code/struct.Loc.html' title='xswag_base::code::Loc'>Loc</a></code></h4>
 <div class='docblock'><p>Returns the location of the given bytes as line and col numbers within
 this file.</p>
 </div><h4 id='method.get_line' class='method'><code>fn <a href='#method.get_line' class='fnname'>get_line</a>(&amp;self, line: <a class='struct' href='../../xswag_base/code/struct.LineIdx.html' title='xswag_base::code::LineIdx'>LineIdx</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
 <div class='docblock'><p>Returns the line with the given index or <code>None</code> if it is invalid.</p>
+</div><h4 id='method.get_line_start' class='method'><code>fn <a href='#method.get_line_start' class='fnname'>get_line_start</a>(&amp;self, line: <a class='struct' href='../../xswag_base/code/struct.LineIdx.html' title='xswag_base::code::LineIdx'>LineIdx</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../xswag_base/code/struct.BytePos.html' title='xswag_base::code::BytePos'>BytePos</a>&gt;</code></h4>
+<div class='docblock'><p>Returns the byte offset of the first symbol in <code>line</code></p>
 </div><h4 id='method.find_lines' class='method'><code>fn <a href='#method.find_lines' class='fnname'>find_lines</a>(&amp;self)</code></h4>
 <div class='docblock'><p>Searches for line endings and collects all line beginnings in the
 source string. It starts searching at the latest line beginning in the
@@ -73,7 +78,8 @@ list so far (or at the beginning of none was added yet).</p>
 
 <p>Normally this is done while lexing to avoid iterating
 over the whole string multiple times. Mostly handy for tests.</p>
-</div></div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../xswag_base/code/struct.FileMap.html' title='xswag_base::code::FileMap'>FileMap</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
