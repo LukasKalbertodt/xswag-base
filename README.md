@@ -6,9 +6,9 @@ xswag-base
 [**Documentation**](https://lukaskalbertodt.github.io/xswag-base/xswag_base/)
 
 This library provides basic functionality for `xswag` applications and
-libraries.
+libraries. It's mostly about pretty error messages and managing the source file. I'm not sure that this library is useful for general purpose use, because it was designed with the `xswag` in mind.
 
-**Note:** this project is still in it's early days!
+**Note:** While this project is alrady usable, it's still in its early days!
 
 ### Development
 
